@@ -1,0 +1,47 @@
+Equipment:
+  - id: 1
+    version: 0
+    DIS: "FIRST"
+    code: "EQ_FIRST"
+    description: "DES_FIRST"   
+  - id: 2
+    version: 0
+    DIS: "SECOND"
+    code: "EQ_SECOND"
+    description: "DES_SECOND"  
+    
+EquipmentCycle:
+  - id: 1
+    version: 0
+    DIS: "FIRST"
+    code: "EC_FIRST"
+    description: "DES_FIRST"   
+    EQUIPMENT_ID: 1
+  - id: 2
+    version: 0
+    DIS: "SECOND"
+    code: "EC_SECOND"
+    description: "DES_SECOND"  
+    EQUIPMENT_ID: 2
+    
+ENTITY_WITH_HISTORY:
+ - id: 1
+   version: 0
+   code: "COD1"
+   description: "DES1"   
+   status: "B"
+   
+STATUS_HISTORY:
+- id: 1
+  version: 0
+  ENTITY_ID: 1
+  EQUIPMENT_ID: 1
+  EQUIPMENT_CYCLE_ID: 1
+  status: "A"
+- id: 2
+  version: 0
+  ENTITY_ID: 1
+  EQUIPMENT_ID: 2
+  EQUIPMENT_CYCLE_ID: 2
+  status: "B"
+  
