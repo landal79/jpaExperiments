@@ -1,0 +1,13 @@
+EMPLOYEES:
+  - id: 1
+    version: 0
+    code: "COD1"
+    description: "DES1"   
+  - id: 2
+    version: 0
+    code: "COD2"
+    description: "DES2"    
+  - id: 3
+    version: 0
+    code: "COD3"
+    description: "DES3"       
