@@ -1,0 +1,5 @@
+jpaOneToManyUnidirectional
+============================
+
+OneToMany unidirectional mapping
+
