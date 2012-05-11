@@ -16,6 +16,7 @@
 	<modules>
 		<module>jpaPolymorphism</module>
 		<module>jpaOneToManyUnidirectional</module>
+		<module>jpaOneToManyBidirectional</module>
 	</modules>
 	
 </project>
