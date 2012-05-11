@@ -7,8 +7,10 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "EMPLOYEES")
 public class Employee extends BaseEntity{
 
 	@OneToMany//(mappedBy = "employee")
