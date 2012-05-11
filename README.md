@@ -1,4 +1,6 @@
 jpaExperiments
 ==============
 
-Some test jpa model mapping
+Some jpa model mapping tests:
+
+1) jpaPolymorphism: domain model with inheritance and polymorphic association
