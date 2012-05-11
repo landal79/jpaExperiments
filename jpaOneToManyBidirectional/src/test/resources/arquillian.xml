@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<arquillian xmlns="http://jboss.com/arquillian" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+	<engine>
+		<deploymentExportPath>target/</deploymentExportPath>
+	</engine>
+
+	<container qualifier="jboss7" default="true">
+		<protocol type="jmx-as7">
+			<property name="executionType">REMOTE</property>
+		</protocol>
+	</container>
+
+</arquillian>
