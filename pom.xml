@@ -19,6 +19,7 @@
 		<module>jpaPolymorphism</module>
 		<module>jpaOneToManyUnidirectional</module>
 		<module>jpaOneToManyBidirectional</module>
+		<module>jpa-metamodel-generation</module>
 	</modules>
 	
 </project>
