@@ -20,6 +20,8 @@
 		<module>jpaOneToManyUnidirectional</module>
 		<module>jpaOneToManyBidirectional</module>
 		<module>jpa-metamodel-generation</module>
+		<module>jpaOneToMany</module>
+		<module>jpaElementCollection</module>
 	</modules>
 	
 </project>
