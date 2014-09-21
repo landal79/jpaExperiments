@@ -6,10 +6,8 @@ import static org.junit.Assert.assertFalse;
 import java.util.List;
 import java.util.logging.Logger;
 
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.transaction.UserTransaction;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -41,12 +39,9 @@ public class JPAOneToManyArquillianExtensionTest {
 	@PersistenceContext(unitName = "test")
 	private EntityManager em;
 
-	@Inject
-	private UserTransaction utx;
-
 	@Test
 	@UsingDataSet("datasets/employees.yml")
-	public void testExtension_withYML() throws Exception {		
+	public void testExtension_withYML() throws Exception {
 
 		printStatus("Selecting (using JPQL)...");
 		List<Employee> employees = em.createQuery(
@@ -55,20 +50,20 @@ public class JPAOneToManyArquillianExtensionTest {
 
 		assertFalse(employees.isEmpty());
 		printStatus("size: " + employees.size());
-		assertEquals(3, employees.size());		
+		assertEquals(3, employees.size());
 
 	}
-	
+
 	@Test
 	@ApplyScriptBefore("insert.sql")
-	public void testExtension_withSQL() throws Exception {		
-		
+	public void testExtension_withSQL() throws Exception {
+
 		List<Employee> employees = em.createQuery(
 				"select e from Employee e order by e.code", Employee.class)
 				.getResultList();
 
-		assertFalse(employees.isEmpty());		
-		assertEquals(3, employees.size());	
+		assertFalse(employees.isEmpty());
+		assertEquals(3, employees.size());
 
 	}
 

@@ -14,8 +14,6 @@
 		<dependency>
 			<groupId>org.jboss.arquillian.extension</groupId>
 			<artifactId>arquillian-persistence-impl</artifactId>
-			<version>${version.arquillian.persistence}</version>
-			<scope>test</scope>
 		</dependency>
 
 	</dependencies>

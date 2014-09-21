@@ -27,30 +27,17 @@ import org.junit.runner.RunWith;
 @RunWith(Arquillian.class)
 public class StatusHistoryTest {
 
-	private static final Logger log = Logger.getLogger(StatusHistoryTest.class
-			.getName());
+	private static final Logger log = Logger.getLogger(StatusHistoryTest.class.getName());
 
 	@Deployment
 	public static Archive<?> createDeployment() {
-		return ShrinkWrap
-				.create(JavaArchive.class, "test.jar")
-				.addPackage(BaseEntity.class.getPackage())
+		return ShrinkWrap.create(JavaArchive.class, "test.jar").addPackage(BaseEntity.class.getPackage())
 				.addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
-				.addAsManifestResource("test-persistence.xml",
-						"persistence.xml");
+				.addAsManifestResource("test-persistence.xml", "persistence.xml");
 	}
 
 	@PersistenceContext(unitName = "test")
 	private EntityManager em;
-
-	@Inject
-	private UserTransaction utx;
-
-	private void printStatus(Object message) {
-		if (log instanceof Logger) {
-			((Logger) log).info(message.toString());
-		}
-	}
 
 	@Test
 	@UsingDataSet("status_history_datasets.yml")
@@ -64,9 +51,9 @@ public class StatusHistoryTest {
 
 		assertFalse(found.getStateHistory().isEmpty());
 		assertEquals(2, found.getStateHistory().size());
-		
+
 		List<StatusHistory> stateHistory = found.getStateHistory();
-		
+
 		assertTrue(stateHistory.get(0).getEquipmentCycle().getClass().isAssignableFrom(FirstEquipmentCycle.class));
 		assertTrue(stateHistory.get(0).getEquipment().getClass().isAssignableFrom(FirstEquipment.class));
 		assertTrue(stateHistory.get(1).getEquipmentCycle().getClass().isAssignableFrom(SecondEquipmentCycle.class));
