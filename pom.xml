@@ -22,6 +22,8 @@
 		<module>jpa-one-to-many-unidirectional-joincolumn</module>
 		<module>jpa-element-collection</module>
 		<module>jpa-metamodel-generation</module>
+		<module>jpa-one-to-one-undirectional</module>
+		<module>jpa-one-to-one-bidirectional</module>
 	</modules>
 
 	<profiles>
