@@ -29,12 +29,9 @@ public class ListWithBidirectionalAssociationTest {
 
 	@Deployment
 	public static Archive<?> createDeployment() {
-		return ShrinkWrap
-				.create(JavaArchive.class, "test.jar")
-				.addPackage(BaseEntity.class.getPackage())
+		return ShrinkWrap.create(JavaArchive.class, "test.jar").addPackage(BaseEntity.class.getPackage())
 				.addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
-				.addAsManifestResource("test-persistence.xml",
-						"persistence.xml");
+				.addAsManifestResource("test-persistence.xml", "persistence.xml").addAsManifestResource("test-ds.xml");
 	}
 
 	@PersistenceContext(unitName = "test")
@@ -44,7 +41,7 @@ public class ListWithBidirectionalAssociationTest {
 	private UserTransaction utx;
 
 	public void insertSampleRecords() throws Exception {
-		
+
 		utx.begin();
 		em.joinTransaction();
 
@@ -53,48 +50,65 @@ public class ListWithBidirectionalAssociationTest {
 		em.createQuery("delete from SerialKitStatus").executeUpdate();
 
 		printStatus("Inserting records...");
-		
+
 		SerialKit sk = new SerialKit();
 		sk.setCode("SK_CODE");
 		sk.setBarcode("SK_BARCODE");
 		sk.setStatus(Status.NEW);
-		
+
 		SerialKitStatus sks = new SerialKitStatus();
 		sks.setStatus(Status.NEW);
-		sks.setOperationDate(new Date());		
+		sks.setOperationDate(new Date());
 		sk.addStatus(sks);
-		
-		SerialKit mergedSK = em.merge(sk);
-		em.flush();
-		
-//		for (SerialKitStatus status : mergedSK.getStatusHistory()) {
-//			em.remove(status);
-//		}
-		
-		mergedSK.getStatusHistory().clear();					
 
+		em.persist(sk);
 		utx.commit();
-		
+
 	}
 
 	@Test
-	public void testDeleteListWithBidirectionalAssociation() throws Exception {
+	public void test_one_to_many_bidirectional_delete() throws Exception {
 
 		insertSampleRecords();
 
 		utx.begin();
 		em.joinTransaction();
 
-		List<SerialKit> skList = em.createQuery("from SerialKit sk", SerialKit.class).getResultList();				
+		// delete all previously inserted history items
+		List<SerialKit> skList = em.createNamedQuery(SerialKit.FIND_ALL, SerialKit.class).getResultList();
+		assertNotNull(skList);
+		assertFalse(skList.isEmpty());
+
+		SerialKit serialKit = skList.get(0);
+		serialKit.deleteHistory();
+
+		utx.commit();
+		utx.begin();
+		em.joinTransaction();
+
+		skList = em.createNamedQuery(SerialKit.FIND_ALL, SerialKit.class).getResultList();
+		assertTrue(skList.get(0).isHistoryEmpty());
+
+		utx.commit();
+
+	}
+
+	@Test
+	public void test_one_to_many_bidirectional_with_fetch() throws Exception {
+
+		insertSampleRecords();
+
+		utx.begin();
+		em.joinTransaction();
+
+		List<SerialKit> skList = em.createNamedQuery(SerialKit.FIND_ALL_WITH_HISTORY, SerialKit.class).getResultList();
+
+		utx.commit();
 
 		assertNotNull(skList);
 		assertFalse(skList.isEmpty());
-		
-		assertTrue(skList.get(0).getStatusHistory().isEmpty());
-		
-		utx.commit();
-		
-		
+
+		assertFalse(skList.get(0).isHistoryEmpty());
 
 	}
 
