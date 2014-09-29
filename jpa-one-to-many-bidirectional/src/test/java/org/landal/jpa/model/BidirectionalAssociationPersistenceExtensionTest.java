@@ -15,18 +15,26 @@ import javax.transaction.UserTransaction;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.persistence.Cleanup;
+import org.jboss.arquillian.persistence.CleanupStrategy;
+import org.jboss.arquillian.persistence.TestExecutionPhase;
+import org.jboss.arquillian.persistence.UsingDataSet;
+import org.jboss.arquillian.transaction.api.annotation.TransactionMode;
+import org.jboss.arquillian.transaction.api.annotation.Transactional;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+@Cleanup(phase = TestExecutionPhase.AFTER, strategy = CleanupStrategy.USED_ROWS_ONLY)
+@Transactional(TransactionMode.COMMIT)
 @RunWith(Arquillian.class)
-public class ListWithBidirectionalAssociationTest {
+public class BidirectionalAssociationPersistenceExtensionTest {
 
-	private static final Logger log = Logger.getLogger(ListWithBidirectionalAssociationTest.class.getName());
+	private static final Logger log = Logger
+			.getLogger(BidirectionalAssociationPersistenceExtensionTest.class.getName());
 
 	@Deployment
 	public static Archive<?> createDeployment() {
@@ -41,10 +49,10 @@ public class ListWithBidirectionalAssociationTest {
 	@Inject
 	private UserTransaction utx;
 
-	@Before
+	// @Before
 	public void setUp() throws Exception {
 
-		utx.begin();
+		// utx.begin();
 		em.joinTransaction();
 
 		printStatus("Clearing the database...");
@@ -64,14 +72,15 @@ public class ListWithBidirectionalAssociationTest {
 		sk.addStatus(sks);
 
 		em.persist(sk);
-		utx.commit();
+		// utx.commit();
 
 	}
 
 	@Test
+	@UsingDataSet("datasets/serialkits.yml")
 	public void test_one_to_many_bidirectional_delete() throws Exception {
 
-		utx.begin();
+		// utx.begin();
 		em.joinTransaction();
 
 		// delete all previously inserted history items
@@ -89,14 +98,15 @@ public class ListWithBidirectionalAssociationTest {
 		skList = em.createNamedQuery(SerialKit.FIND_ALL, SerialKit.class).getResultList();
 		assertTrue(skList.get(0).isHistoryEmpty());
 
-		utx.commit();
+		// utx.commit();
 
 	}
 
 	@Test
+	@UsingDataSet("datasets/serialkits.yml")
 	public void test_one_to_many_bidirectional_with_fetch() throws Exception {
 
-		utx.begin();
+		// utx.begin();
 		em.joinTransaction();
 
 		List<SerialKit> skList = em.createNamedQuery(SerialKit.FIND_ALL_WITH_HISTORY, SerialKit.class).getResultList();
