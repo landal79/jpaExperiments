@@ -24,6 +24,7 @@
 		<module>jpa-metamodel-generation</module>
 		<module>jpa-one-to-one-undirectional</module>
 		<module>jpa-one-to-one-bidirectional</module>
+		<module>jpa-model-core</module>
 	</modules>
 
 	<profiles>
