@@ -1,64 +1,38 @@
 package org.landal.jpa.model;
 
-import java.io.Serializable;
-
 import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @MappedSuperclass
-public abstract class BaseEntity implements Serializable{
-	
+public abstract class BaseBusinessEntity extends BaseEntity {
+
 	private static final long serialVersionUID = 1L;
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "ID")
-	private Long id;
-
-	@Version
-	@Column(name = "VERSION")
-	protected Integer version;
 
 	@NotNull
 	@Size(min = 2, max = 10)
 	@Basic(optional = false)
 	@Column(name = "CODE", length = 10, nullable = false)
 	private String code;
-	
+
 	@Size(min = 1, max = 100)
 	@Basic(optional = true)
 	@Column(name = "DESCRIPTION", length = 100, nullable = true)
 	private String description;
 
-	public BaseEntity() {
+	public BaseBusinessEntity() {
 
 	}
 
 	@Override
 	public String toString() {
-
-		StringBuilder sb = new StringBuilder();
-		sb.append(getClass().getSimpleName()).append("@").append(hashCode())
-				.append("[id = ").append(getId()).append("; code = ")
-				.append(getCode()).append("]");
-
-		return sb.toString();
+		return new StringBuilder().append(getClass().getSimpleName()).append("@").append(hashCode()).append("[id = ")
+				.append(getId()).append("; code = ").append(getCode()).append("]").toString();
 	}
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
+	// /////////////////////////////
 
 	public String getCode() {
 		return code;

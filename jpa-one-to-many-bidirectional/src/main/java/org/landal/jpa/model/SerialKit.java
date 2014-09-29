@@ -17,12 +17,14 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "SERIAL_KIT")
 @NamedQueries({ @NamedQuery(name = SerialKit.FIND_ALL, query = "from SerialKit sk"),
+	@NamedQuery(name = SerialKit.DELETE_ALL, query = "delete from SerialKit"),
 		@NamedQuery(name = SerialKit.FIND_ALL_WITH_HISTORY, query = "from SerialKit sk left join fetch sk.statusHistory") })
-public class SerialKit extends BaseEntity {
+public class SerialKit extends BaseBusinessEntity {
 
 	private static final long serialVersionUID = 1L;
 
 	public final static String FIND_ALL = "SerialKit.findAll";
+	public final static String DELETE_ALL = "SerialKit.deleteAll";
 	public final static String FIND_ALL_WITH_HISTORY = "SerialKit.findAllWithHistory";
 
 	/**

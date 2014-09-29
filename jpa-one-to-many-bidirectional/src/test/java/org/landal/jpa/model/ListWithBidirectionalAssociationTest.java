@@ -19,6 +19,7 @@ import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -29,7 +30,7 @@ public class ListWithBidirectionalAssociationTest {
 
 	@Deployment
 	public static Archive<?> createDeployment() {
-		return ShrinkWrap.create(JavaArchive.class, "test.jar").addPackage(BaseEntity.class.getPackage())
+		return ShrinkWrap.create(JavaArchive.class, "test.jar").addPackage(BaseBusinessEntity.class.getPackage())
 				.addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
 				.addAsManifestResource("test-persistence.xml", "persistence.xml").addAsManifestResource("test-ds.xml");
 	}
@@ -40,14 +41,15 @@ public class ListWithBidirectionalAssociationTest {
 	@Inject
 	private UserTransaction utx;
 
-	public void insertSampleRecords() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 
 		utx.begin();
 		em.joinTransaction();
 
 		printStatus("Clearing the database...");
-		em.createQuery("delete from SerialKit").executeUpdate();
-		em.createQuery("delete from SerialKitStatus").executeUpdate();
+		em.createNamedQuery(SerialKit.DELETE_ALL).executeUpdate();
+		em.createNamedQuery(SerialKitStatus.DELETE_ALL).executeUpdate();
 
 		printStatus("Inserting records...");
 
@@ -68,8 +70,6 @@ public class ListWithBidirectionalAssociationTest {
 
 	@Test
 	public void test_one_to_many_bidirectional_delete() throws Exception {
-
-		insertSampleRecords();
 
 		utx.begin();
 		em.joinTransaction();
@@ -96,8 +96,6 @@ public class ListWithBidirectionalAssociationTest {
 	@Test
 	public void test_one_to_many_bidirectional_with_fetch() throws Exception {
 
-		insertSampleRecords();
-
 		utx.begin();
 		em.joinTransaction();
 
@@ -107,7 +105,6 @@ public class ListWithBidirectionalAssociationTest {
 
 		assertNotNull(skList);
 		assertFalse(skList.isEmpty());
-
 		assertFalse(skList.get(0).isHistoryEmpty());
 
 	}

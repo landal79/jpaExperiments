@@ -16,6 +16,7 @@
 	</properties>
 
 	<modules>
+		<module>jpa-model-core</module>
 		<module>jpa-polymorphism</module>
 		<module>jpa-one-to-many-unidirectional</module>
 		<module>jpa-one-to-many-bidirectional</module>
@@ -24,8 +25,17 @@
 		<module>jpa-metamodel-generation</module>
 		<module>jpa-one-to-one-undirectional</module>
 		<module>jpa-one-to-one-bidirectional</module>
-		<module>jpa-model-core</module>
 	</modules>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.landal.jpa</groupId>
+				<artifactId>jpa-model-core</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<profiles>
 		<profile>
