@@ -12,6 +12,8 @@ import javax.persistence.PersistenceContext;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.persistence.ApplyScriptBefore;
+import org.jboss.arquillian.persistence.TransactionMode;
+import org.jboss.arquillian.persistence.Transactional;
 import org.jboss.arquillian.persistence.UsingDataSet;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -40,6 +42,7 @@ public class JPAOneToManyArquillianExtensionTest {
 	private EntityManager em;
 
 	@Test
+	@Transactional(TransactionMode.ROLLBACK)
 	@UsingDataSet("datasets/employees.yml")
 	public void testExtension_withYML() throws Exception {
 
@@ -55,6 +58,7 @@ public class JPAOneToManyArquillianExtensionTest {
 	}
 
 	@Test
+	@Transactional(TransactionMode.ROLLBACK)
 	@ApplyScriptBefore("insert.sql")
 	public void testExtension_withSQL() throws Exception {
 

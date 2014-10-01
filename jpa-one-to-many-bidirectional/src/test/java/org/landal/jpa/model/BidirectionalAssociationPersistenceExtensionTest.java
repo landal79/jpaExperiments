@@ -4,7 +4,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -15,12 +14,9 @@ import javax.transaction.UserTransaction;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.persistence.Cleanup;
-import org.jboss.arquillian.persistence.CleanupStrategy;
-import org.jboss.arquillian.persistence.TestExecutionPhase;
+import org.jboss.arquillian.persistence.TransactionMode;
+import org.jboss.arquillian.persistence.Transactional;
 import org.jboss.arquillian.persistence.UsingDataSet;
-import org.jboss.arquillian.transaction.api.annotation.TransactionMode;
-import org.jboss.arquillian.transaction.api.annotation.Transactional;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
@@ -28,8 +24,6 @@ import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-@Cleanup(phase = TestExecutionPhase.AFTER, strategy = CleanupStrategy.USED_ROWS_ONLY)
-@Transactional(TransactionMode.COMMIT)
 @RunWith(Arquillian.class)
 public class BidirectionalAssociationPersistenceExtensionTest {
 
@@ -40,7 +34,7 @@ public class BidirectionalAssociationPersistenceExtensionTest {
 	public static Archive<?> createDeployment() {
 		return ShrinkWrap.create(JavaArchive.class, "test.jar").addPackage(BaseBusinessEntity.class.getPackage())
 				.addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
-				.addAsManifestResource("test-persistence.xml", "persistence.xml").addAsManifestResource("test-ds.xml");
+				.addAsManifestResource("test-persistence.xml", "persistence.xml");
 	}
 
 	@PersistenceContext(unitName = "test")
@@ -49,39 +43,10 @@ public class BidirectionalAssociationPersistenceExtensionTest {
 	@Inject
 	private UserTransaction utx;
 
-	// @Before
-	public void setUp() throws Exception {
-
-		// utx.begin();
-		em.joinTransaction();
-
-		printStatus("Clearing the database...");
-		em.createNamedQuery(SerialKit.DELETE_ALL).executeUpdate();
-		em.createNamedQuery(SerialKitStatus.DELETE_ALL).executeUpdate();
-
-		printStatus("Inserting records...");
-
-		SerialKit sk = new SerialKit();
-		sk.setCode("SK_CODE");
-		sk.setBarcode("SK_BARCODE");
-		sk.setStatus(Status.NEW);
-
-		SerialKitStatus sks = new SerialKitStatus();
-		sks.setStatus(Status.NEW);
-		sks.setOperationDate(new Date());
-		sk.addStatus(sks);
-
-		em.persist(sk);
-		// utx.commit();
-
-	}
-
 	@Test
-	@UsingDataSet("datasets/serialkits.yml")
+	@Transactional(TransactionMode.ROLLBACK)
+	@UsingDataSet({ "datasets/serialkits.yml", "datasets/serialkitstatus.yml" })
 	public void test_one_to_many_bidirectional_delete() throws Exception {
-
-		// utx.begin();
-		em.joinTransaction();
 
 		// delete all previously inserted history items
 		List<SerialKit> skList = em.createNamedQuery(SerialKit.FIND_ALL, SerialKit.class).getResultList();
@@ -98,31 +63,24 @@ public class BidirectionalAssociationPersistenceExtensionTest {
 		skList = em.createNamedQuery(SerialKit.FIND_ALL, SerialKit.class).getResultList();
 		assertTrue(skList.get(0).isHistoryEmpty());
 
-		// utx.commit();
-
 	}
 
 	@Test
-	@UsingDataSet("datasets/serialkits.yml")
+	@Transactional(TransactionMode.ROLLBACK)
+	@UsingDataSet({ "datasets/serialkits.yml", "datasets/serialkitstatus.yml" })
 	public void test_one_to_many_bidirectional_with_fetch() throws Exception {
-
-		// utx.begin();
-		em.joinTransaction();
 
 		List<SerialKit> skList = em.createNamedQuery(SerialKit.FIND_ALL_WITH_HISTORY, SerialKit.class).getResultList();
 
-		utx.commit();
+		 utx.commit();
 
 		assertNotNull(skList);
 		assertFalse(skList.isEmpty());
 		assertFalse(skList.get(0).isHistoryEmpty());
 
-	}
+		//Needed because arquillian persistence rolls back the transaction
+		utx.begin();
 
-	private void printStatus(Object message) {
-		if (log instanceof Logger) {
-			((Logger) log).info(message.toString());
-		}
 	}
 
 }

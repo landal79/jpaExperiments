@@ -11,10 +11,6 @@
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<properties>
-		<version.arquillian.persistence>1.0.0.Alpha6</version.arquillian.persistence>
-	</properties>
-
 	<modules>
 		<module>jpa-model-core</module>
 		<module>jpa-polymorphism</module>

@@ -32,7 +32,7 @@ public class ListWithBidirectionalAssociationTest {
 	public static Archive<?> createDeployment() {
 		return ShrinkWrap.create(JavaArchive.class, "test.jar").addPackage(BaseBusinessEntity.class.getPackage())
 				.addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
-				.addAsManifestResource("test-persistence.xml", "persistence.xml").addAsManifestResource("test-ds.xml");
+				.addAsManifestResource("test-persistence.xml", "persistence.xml");
 	}
 
 	@PersistenceContext(unitName = "test")

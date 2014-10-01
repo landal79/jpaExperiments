@@ -31,7 +31,7 @@ public class SerialKitStatus extends BaseEntity {
 	@Column(name = "STATUS", length = 20, nullable = false)
 	private Status status;
 
-	@Column(name = "OPERATION_DATE", nullable = false)
+	@Column(name = "OPERATION_DATE", nullable = true)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date operationDate;
 

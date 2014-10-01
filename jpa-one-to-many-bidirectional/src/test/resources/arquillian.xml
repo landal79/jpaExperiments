@@ -5,12 +5,12 @@
 
 <!--     <defaultProtocol type="Servlet 3.0" /> -->
 
-    <engine>
-      <property name="deploymentExportPath">target/</property>
+   <engine>
+        <property name="deploymentExportPath">target/deployments</property>
     </engine>
 
     <extension qualifier="persistence">
-		<property name="defaultDataSource">java:jboss/datasources/TestDS</property>
+		<property name="defaultDataSource">java:jboss/datasources/ExampleDS</property>
 		<property name="initStatement">SET REFERENTIAL_INTEGRITY FALSE</property>
 		<property name="userTransactionJndi">java:jboss/UserTransaction</property>
 	</extension>
