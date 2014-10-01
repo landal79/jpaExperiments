@@ -1,0 +1,5 @@
+SERIAL_KIT_STATUS:
+  - ID: 1
+    VERSION: 0    
+    STATUS: "NEW"    
+    SERIAL_KIT_ID: 1   
