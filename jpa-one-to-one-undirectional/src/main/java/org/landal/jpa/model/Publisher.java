@@ -17,6 +17,18 @@ public class Publisher implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	public static final Publisher newInstance(String name, String website){
+
+		if(name == null || website == null){
+			throw new IllegalArgumentException();
+		}
+
+		Publisher p = new Publisher();
+		p.setName(name);
+		p.setWebsite(website);
+		return p;
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
