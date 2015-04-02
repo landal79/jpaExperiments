@@ -17,6 +17,7 @@ import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.landal.jpa.model.Person;
@@ -43,6 +44,7 @@ public class OneToOneUnidirectionalTest {
 	@Inject
 	private UserTransaction utx;
 
+	@Before
 	public void insertSampleRecords() throws Exception {
 		utx.begin();
 		em.joinTransaction();
@@ -70,7 +72,7 @@ public class OneToOneUnidirectionalTest {
 	}
 
 	@Test
-	public void test_element_collection() throws Exception {
+	public void test_read_one_to_one_unidirectional() throws Exception {
 
 		insertSampleRecords();
 

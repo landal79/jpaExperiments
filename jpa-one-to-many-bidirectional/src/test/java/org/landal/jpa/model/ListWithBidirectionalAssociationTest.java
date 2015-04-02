@@ -1,5 +1,6 @@
 package org.landal.jpa.model;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -66,6 +67,26 @@ public class ListWithBidirectionalAssociationTest {
 		em.persist(sk);
 		utx.commit();
 
+	}
+	
+	@Test
+	public void test_one_to_many_bidirectional() throws Exception {
+		
+		utx.begin();
+		em.joinTransaction();
+		
+		List<SerialKit> skList = em.createNamedQuery(SerialKit.FIND_ALL, SerialKit.class).getResultList();
+		assertNotNull(skList);
+		assertFalse(skList.isEmpty());
+		
+		SerialKit serialKit = skList.get(0);
+		assertNotNull(serialKit);
+		assertNotNull(serialKit.getStatusHistory());
+		assertEquals(1,serialKit.getStatusHistory().size());
+		
+		SerialKitStatus serialKitStatus = serialKit.getStatusHistory().get(0);
+		assertNotNull(serialKitStatus);
+		
 	}
 
 	@Test
