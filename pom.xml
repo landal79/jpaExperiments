@@ -22,6 +22,7 @@
 		<module>jpa-one-to-one-undirectional</module>
 		<module>jpa-one-to-one-bidirectional</module>
 		<module>jpa-many-to-many-with-additional-state</module>
+		<module>jpa-many-to-many-basic</module>
 	</modules>
 
 	<dependencyManagement>

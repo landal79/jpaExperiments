@@ -10,7 +10,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "category")
+@Table(name = "CATEGORY")
 public class Category extends BaseEntity {
 
 	private static final long serialVersionUID = 1L;
