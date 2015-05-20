@@ -1,8 +1,10 @@
 package org.landal.jpa.model;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -12,6 +14,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Fetch;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.UserTransaction;
 
@@ -77,22 +81,45 @@ public class OneToOneBidirectionalTest {
 		utx.commit();
 
 	}
-	
+
+	/**
+	 * Test with criteria API.
+	 * 
+	 * select b from Book b fetch join b.publisher where p.name = 'Manning'
+	 */
 	@Test
-	public void test_one_to_one_unidirectional_criteria() {
-		
+	public void test_one_to_one_unidirectional__with_criteria() {
+
+		final String publisherName = "Manning";
+
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Book> c = cb.createQuery(Book.class);
+		// Define query root
 		Root<Book> bookRoot = c.from(Book.class);
-		bookRoot.fetch("publisher");
+		Fetch<Book, Publisher> publisher = bookRoot.fetch(Book_.publisher);
 		c.select(bookRoot);
+					
+		List<Predicate> criteria = new ArrayList<Predicate>();		
+		criteria.add(cb.equal(bookRoot.get(Book_.publisher).get(Publisher_.name), publisherName));
+		criteria.add(cb.equal(bookRoot.get(Book_.title), "title"));
 		
-		TypedQuery<Book> q = em.createQuery(c);
-		List<Book> books = q.getResultList();
+		Predicate disjunction = cb.disjunction();
+		disjunction.getExpressions().addAll(criteria);
 		
-		Book book = books.get(0);
+		c.where(disjunction);
+		
+		TypedQuery<Book> query = em.createQuery(c);
 
-		assertThat(book.getPublisher().getName(), equalTo("Manning"));
+		printStatus(query.unwrap(org.hibernate.Query.class).getQueryString());
+
+		List<Book> books = query.getResultList();
+
+		assertThat(books, notNullValue());
+
+		for (Book book : books) {
+			assertThat(book.getPublisher().getName(), equalTo(publisherName));
+		}
+
 	}
 
 	private void printStatus(Object message) {

@@ -15,4 +15,13 @@
 		</dependency>
 	</dependencies>
 
+	<profiles>
+		<profile>
+			<id>jpa-metamodel</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+	</profiles>
+
 </project>
