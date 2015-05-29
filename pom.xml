@@ -24,6 +24,7 @@
 		<module>jpa-many-to-many-with-additional-state</module>
 		<module>jpa-many-to-many-basic</module>
 		<module>jpa-many-to-many-bidirectional</module>
+		<module>enum-with-interface-mapping</module>
 	</modules>
 
 	<dependencyManagement>
